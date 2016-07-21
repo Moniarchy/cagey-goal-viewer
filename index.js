@@ -2,8 +2,12 @@ const express = require('express');
 const request = require('request');
 const qs = require('querystring');
 const cookieSession = require('cookie-session');
+const bodyParser = require('body-parser')
 
 const app = express();
+
+app.use( bodyParser.json() );
+
 
 const github_url = 'https://api.github.com';
 
@@ -114,27 +118,34 @@ app.get('/comments', (req, res) => {
     })
 });
 
-app.post('/create-comment', (req, res) => {
-  // let token = req.session.github_access_token;
+const ghCreateComment = issueNumber =>
+  `${github_url}/repos/GuildCrafts/web-development-js/issues/${issueNumber}/comments`
 
-  res.send( req.body.number )
+app.post('/create-comment', (req, res) => {
+  const token = req.session.github_access_token;
+
+  // res.send( req.body )
   // Issue number to create comments
-  // let issueNumber = req.body.number;
-  // let url = `${github_url}/repos/GuildCrafts/web-development-js/issues/${issueNumber}/comments`;
-  //
-  // request({
-  //   method: 'POST',
-  //   url: url,
-  //   headers: {
-  //     'user-agent': 'node.js',
-  //     'authorization': `Token ${token}`
-  //   }
-  // }, (error, response) => {
-  //     if (error) throw error;
-  //     let comments = JSON.parse(response.body);
-  //     console.log( "These are the comments :D", comments);
-  //     res.json(comments);
-  // })
+  const { issueNumber, comment } = req.body;
+  // const issueNumber = req.body.issueNumber;
+  // const comment = req.body.comment;
+
+  const url = ghCreateComment( issueNumber )
+
+  request({
+    method: 'POST',
+    url: url,
+    headers: {
+      'user-agent': 'node.js',
+      'authorization': `Token ${token}`
+    },
+    body: comment
+  }, (error, response) => {
+      if (error) throw error;
+      let comments = JSON.parse(response.body);
+      console.log( "These are the comments :D", comments);
+      res.json(comments);
+  })
 });
 
 app.put('/update-comment', (req, res) => {
