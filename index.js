@@ -5,6 +5,8 @@ const cookieSession = require('cookie-session');
 
 const app = express();
 
+const github_url = 'https://api.github.com';
+
 app.set('port', (process.env.PORT || 5000));
 
 // file to use .env variable
@@ -36,7 +38,7 @@ app.get('/', (req, res) => {
 
     request({
       method: 'GET',
-      url: 'https://api.github.com/repos/GuildCrafts/web-development-js/issues',
+      url: `${github_url}/repos/GuildCrafts/web-development-js/issues`,
       headers: {
         'user-agent': 'node.js',
         'authorization': `Token ${token}`
@@ -55,10 +57,10 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
   // url to get code
-  let url = 'https://github.com/login/oauth/authorize?' + qs.stringify({
+  let url = `${github_url}/login/oauth/authorize?${qs.stringify({
     scope: 'repo',
     client_id: process.env.GITHUB_CLIENT_ID
-  });
+  })}`
 
   // authorize user
   res.redirect(url);
@@ -92,7 +94,10 @@ app.get('/oauth_callback', (req, res) => {
 
 app.get('/comments', (req, res) => {
   let token = req.session.github_access_token;
-  let url = `https://api.github.com/repos/GuildCrafts/web-development-js/issues/${req.body.number}/comments`
+
+  let issueNumber = req.body.number;
+
+  let url = `${github_url}/repos/GuildCrafts/web-development-js/issues/${issueNumber}/comments`
   // RR- is req.body.number right in the link above?
   request({
     method: 'GET',
@@ -109,7 +114,52 @@ app.get('/comments', (req, res) => {
     })
 });
 
+app.post('/create-comment', (req, res) => {
+  // let token = req.session.github_access_token;
 
+  res.send( req.body.number )
+  // Issue number to create comments
+  // let issueNumber = req.body.number;
+  // let url = `${github_url}/repos/GuildCrafts/web-development-js/issues/${issueNumber}/comments`;
+  //
+  // request({
+  //   method: 'POST',
+  //   url: url,
+  //   headers: {
+  //     'user-agent': 'node.js',
+  //     'authorization': `Token ${token}`
+  //   }
+  // }, (error, response) => {
+  //     if (error) throw error;
+  //     let comments = JSON.parse(response.body);
+  //     console.log( "These are the comments :D", comments);
+  //     res.json(comments);
+  // })
+});
+
+app.put('/update-comment', (req, res) => {
+  let token = req.session.github_access_token;
+
+  // Issue number to update comments
+  let issueNumber = req.body.number;
+  let commentId = req.body.commentId;
+
+  let url = `${github_url}/repos/GuildCrafts/web-development-js/issues/${issueNumber}/comments/${commentId}`;
+
+  request({
+    method: 'POST',
+    url: url,
+    headers: {
+      'user-agent': 'node.js',
+      'authorization': `Token ${token}`
+    }
+  }, (error, response) => {
+      if (error) throw error;
+      let comments = JSON.parse(response.body);
+      console.log( "These are the comments :D", comments);
+      res.json(comments);
+  })
+})
 
 app.use(express.static(__dirname+'/views'));
 
