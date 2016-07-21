@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
   // url to get code
-  let url = `${github_url}/login/oauth/authorize?${qs.stringify({
+  let url = `https://github.com/login/oauth/authorize?${qs.stringify({
     scope: 'repo',
     client_id: process.env.GITHUB_CLIENT_ID
   })}`
