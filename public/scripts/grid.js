@@ -41,9 +41,15 @@ var Main = React.createClass({
     }
     this.setState({sortBy: memberSorter});
   },
+<<<<<<< HEAD
   //in order to sort by member name we need to get all member names into a string.
   //move complexity of member name into sortedGoals.
   //move membersorter function into sortedGOals function
+=======
+//in order to sort by member name we need to get all member names into a string.
+//move complexity of member name into sortedGoals.
+//move membersorter function into sortedGOals function
+>>>>>>> d6bc5b6d5b98217b2d8614338bc6df2fd27c9897
 
   render: function() {
       return (
@@ -73,8 +79,13 @@ var Row = React.createClass({
       <tr>
         <IssueNumber number={this.props.goal.number} />
         <GoalLabelsCell goal={this.props.goal} />
+<<<<<<< HEAD
         <GoalTitle title={this.props.goal.title} />
         <MemberName displayName={this.props.goal.user.login} htmlUrl={this.props.goal.htmlUrl} />
+=======
+        <GoalTitle title={this.props.goal.title}  htmlUrl={this.props.goal.htmlUrl} />
+        <MemberName displayName={this.props.goal.user.login} />
+>>>>>>> d6bc5b6d5b98217b2d8614338bc6df2fd27c9897
 
       </tr>
     )
@@ -121,16 +132,6 @@ var GoalLabel = function(props) {
 }
 
 
-/*
-
-labels
-comment number
-
-XX issue title
-xx username
-xx number
-
-*/
 
 // var ImportantButton = React.createClass({
 //   render: function() {
@@ -141,4 +142,8 @@ xx number
 // });
 
 
+<<<<<<< HEAD
 ReactDOM.render(<Main />, document.getElementById('content'));
+=======
+ReactDOM.render(<Main goals={AllGoals} />, document.getElementById('content'));
+>>>>>>> d6bc5b6d5b98217b2d8614338bc6df2fd27c9897

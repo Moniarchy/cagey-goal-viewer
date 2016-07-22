@@ -18,6 +18,8 @@ if (app.get('env') !== 'production'){
   require('dotenv').config();
 }
 
+app.use(express.static(__dirname+'/public'));
+
 // set up sessions
 app.use(cookieSession({
   name: 'session',
@@ -65,6 +67,11 @@ app.get('/oauth_callback', (req, res) => {
   })
 });
 
+app.get('/logout', function(req,res){
+  req.session.github_access_token = null
+  res.redirect('/')
+})
+
 // home page
 app.get('/goals', (req, res) => {
 
@@ -72,24 +79,26 @@ app.get('/goals', (req, res) => {
   const { github_access_token } = req.session;
 
   // check if there is a token
-  if(!github_access_token) throw new Error('ACCESS DENIED')
+  if(!github_access_token){
+    res.send('<h1>Login here:</h1><br/><a href="login"><button>Login</button></a>')
+  } else {
+    request({
+      method: 'GET',
+      url: `${github_url}/repos/GuildCrafts/web-development-js/issues`,
+      headers: {
+        'user-agent': 'node.js',
+        'authorization': `Token ${ github_access_token }`
+      }
+    }, (error, response) => {
+      if (error) throw error;
 
-  request({
-    method: 'GET',
-    url: `${github_url}/repos/GuildCrafts/web-development-js/issues`,
-    headers: {
-      'user-agent': 'node.js',
-      'authorization': `Token ${ github_access_token }`
-    }
-  }, (error, response) => {
-    if (error) throw error;
+      const goals = JSON.parse(response.body);
 
-    const goals = JSON.parse(response.body);
+      console.log( "These are the goals", goals);
 
-    console.log( "These are the goals", goals);
-
-    res.json(goals);
-  })
+      res.json(goals);
+    })
+  }
 });
 
 app.get('/goal-detail', (req, res) => {
@@ -196,13 +205,6 @@ app.put('/update-comment', (req, res) => {
       res.json(response.body);
   })
 })
-
-// test route for ajax calls
-app.get('/test', (request, response) => {
-  response.sendFile(__dirname + '/test.html')
-})
-
-app.use(express.static(__dirname+'/public'));
 
 app.get('*', (req, res) => {
   res.sendFile(__dirname + '/public/index.html')
