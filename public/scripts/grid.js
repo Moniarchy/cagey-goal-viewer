@@ -40,19 +40,25 @@ var Main = React.createClass({
 
   render: function() {
       return (
-      <table>
-        <thead>
-          <tr>
-            <th><a href="" onClick={this.sortByNumber}>Goal Number</a></th>
-            <th>Labels</th>
-            <th><a href="" onClick={this.sortByTitle}>Title</a></th>
-            <th><a href="" onClick={this.sortByMember}>Member Name</a></th>
-          </tr>
-        </thead>
-          <tbody>
-            {this.tableRows()}
-          </tbody>
-      </table> 
+      <div>
+        <div>
+        <a id="loginBtn" href="login" className="logout button">Log In</a>
+        <a id="logoutBtn" href="logout" className="logout button">Log Out</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th><a href="" onClick={this.sortByNumber}>Goal Number</a></th>
+              <th>Labels</th>
+              <th><a href="" onClick={this.sortByTitle}>Title</a></th>
+              <th><a href="" onClick={this.sortByMember}>Member Name</a></th>
+            </tr>
+          </thead>
+            <tbody>
+              {this.tableRows()}
+            </tbody>
+        </table> 
+      </div>
     );
   }
 });
@@ -62,7 +68,7 @@ var Row = React.createClass({
 
     return (
       //this displays data on the rows of our table
-      <tr>
+      <tr className="tblrow">
         <IssueNumber number={this.props.goal.number} />
         <GoalLabelsCell goal={this.props.goal} />
         <GoalTitle title={this.props.goal.title} />
@@ -111,9 +117,11 @@ var GoalLabel = function(props) {
   return <div key={props.label.name} className={className}> {props.label.name}</div>
 }
 
-var LogOutButton = React.createClass({
-  render: 
-})
+// var LogOutButton = React.createClass({
+//   render: function() {
+//     return 
+//   }
+// })
 
 /*
 
