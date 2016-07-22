@@ -27,38 +27,7 @@ app.use(cookieSession({
 // views is directory for all template files
 app.set('view engine', 'ejs');
 
-// home page
-app.get('/', (req, res) => {
-
-  // access_token
-  const { github_access_token } = req.session;
-
-  console.log(`TOKEN: ${ github_access_token }`);
-
-  // check if there is a token
-  if(!token){
-    res.send('<h1>Please Login</h1><a href="login">Login</a>')
-  } else {
-
-    request({
-      method: 'GET',
-      url: `${github_url}/repos/GuildCrafts/web-development-js/issues`,
-      headers: {
-        'user-agent': 'node.js',
-        'authorization': `Token ${ github_access_token }`
-      }
-    }, (error, response) => {
-      if (error) throw error;
-
-      const goals = JSON.parse(response.body);
-
-      console.log( "These are the goals", goals);
-
-      res.json(goals);
-    })
-  }
-});
-
+// click login
 app.get('/login', (req, res) => {
   // url to get code
   const url = `https://github.com/login/oauth/authorize?${qs.stringify({
@@ -93,6 +62,60 @@ app.get('/oauth_callback', (req, res) => {
 
     // back to home
     res.redirect('/');
+  })
+});
+
+// home page
+app.get('/', (req, res) => {
+
+  // access_token
+  const { github_access_token } = req.session;
+
+  // check if there is a token
+  if(!token) throw new Error('ACCESS DENIED')
+
+  request({
+    method: 'GET',
+    url: `${github_url}/repos/GuildCrafts/web-development-js/issues`,
+    headers: {
+      'user-agent': 'node.js',
+      'authorization': `Token ${ github_access_token }`
+    }
+  }, (error, response) => {
+    if (error) throw error;
+
+    const goals = JSON.parse(response.body);
+
+    console.log( "These are the goals", goals);
+
+    res.json(goals);
+  })
+});
+
+app.get('/goal-detail', (req, res) => {
+  // token
+  const { github_access_token } = req.session;
+
+  // get specific details
+  const { number } = req.body;
+
+  // request for issue/goals detail
+  request({
+    method: 'GET',
+    url: `${github_url}/repos/GuildCrafts/web-development-js/issues/${number}`,
+    headers: {
+      'user-agent': 'node.js',
+      'authorization': `Token ${ github_access_token }`
+    }
+  }, (error, response) => {
+    if (error) throw error;
+
+    const goals = JSON.parse(response.body);
+
+    console.log( "These are the goals", goals);
+
+    // these are the details that are returned
+    res.json(goals);
   })
 });
 
@@ -176,7 +199,7 @@ app.put('/update-comment', (req, res) => {
 
 // test route for ajax calls
 app.get('/test', (request, response) => {
-  response.sendFile(__dirname + '/views/pages/test.html')
+  response.sendFile(__dirname + '/test.html')
 })
 
 app.use(express.static(__dirname+'/views'));
