@@ -66,13 +66,13 @@ app.get('/oauth_callback', (req, res) => {
 });
 
 // home page
-app.get('/', (req, res) => {
+app.get('/goals', (req, res) => {
 
   // access_token
   const { github_access_token } = req.session;
 
   // check if there is a token
-  if(!token) throw new Error('ACCESS DENIED')
+  if(!github_access_token) throw new Error('ACCESS DENIED')
 
   request({
     method: 'GET',
@@ -202,10 +202,10 @@ app.get('/test', (request, response) => {
   response.sendFile(__dirname + '/test.html')
 })
 
-app.use(express.static(__dirname+'/views'));
+app.use(express.static(__dirname+'/public'));
 
 app.get('*', (req, res) => {
-  res.sendFile(__dirname + '/views/pages/index.html')
+  res.sendFile(__dirname + '/public/index.html')
 });
 
 app.listen(app.get('port'), () => console.log('Node app is running on port', app.get('port')) );
