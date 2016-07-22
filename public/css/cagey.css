@@ -1,0 +1,52 @@
+tr:nth-child(even) {
+	background: #EEE
+}
+
+
+
+table {
+	border-collapse: collapse;
+	border: 1px solid black;
+	text-align: center;
+	border-radius: 10px;
+	float:left;
+}
+
+thead {
+	background-color: #797979;
+	color:white;
+}
+a {
+    color: #b3e8ff;
+}
+
+
+
+#logoutBtn {
+	float:left;
+	display: inline-block;
+    width: 115px;
+    height: 25px;
+    background: #4E9CAF;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    margin:10px;
+}
+
+#loginBtn {
+	float: left;
+	display: inline-block;
+    width: 115px;
+    height: 25px;
+    background: #4E9CAF;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    margin:10px;
+}
+

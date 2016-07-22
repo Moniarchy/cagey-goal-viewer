@@ -1,4 +1,11 @@
 var Main = React.createClass({
+  componentWillMount: function(){
+      $.getJSON('/goals', function(goals){
+
+      this.setState({goals: goals})
+    }.bind(this))
+  },
+
   getInitialState: function() {
     return {
       sortBy: 'title',
@@ -6,7 +13,7 @@ var Main = React.createClass({
   },
 
   sortedGoals: function() {
-    return _.sortBy(this.props.goals, this.state.sortBy)
+    return _.sortBy(this.state.goals, this.state.sortBy)
   },
 
   tableRows: function() {
@@ -34,26 +41,28 @@ var Main = React.createClass({
     }
     this.setState({sortBy: memberSorter});
   },
-//in order to sort by member name we need to get all member names into a string.
-//move complexity of member name into sortedGoals.
-//move membersorter function into sortedGOals function
 
   render: function() {
       return (
-      <table>
-        <thead>
-          <tr>
-            <th><a href="" onClick={this.sortByNumber}>Goal Number</a></th>
-            <th>Labels</th>
-            <th><a href="" onClick={this.sortByTitle}>Title</a></th>
-            <th><a href="" onClick={this.sortByMember}>Member Name</a></th>
-
-          </tr>
-        </thead>
-          <tbody>
-            {this.tableRows()}
-          </tbody>
-      </table>
+      <div>
+        <div>
+        <a id="loginBtn" href="login" className="logout button">Log In</a>
+        <a id="logoutBtn" href="logout" className="logout button">Log Out</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th><a href="" onClick={this.sortByNumber}>Goal Number</a></th>
+              <th>Labels</th>
+              <th><a href="" onClick={this.sortByTitle}>Title</a></th>
+              <th><a href="" onClick={this.sortByMember}>Member Name</a></th>
+            </tr>
+          </thead>
+            <tbody>
+              {this.tableRows()}
+            </tbody>
+        </table> 
+      </div>
     );
   }
 });
@@ -63,12 +72,11 @@ var Row = React.createClass({
 
     return (
       //this displays data on the rows of our table
-      <tr>
+      <tr className="tblrow">
         <IssueNumber number={this.props.goal.number} />
         <GoalLabelsCell goal={this.props.goal} />
         <GoalTitle title={this.props.goal.title}  htmlUrl={this.props.goal.htmlUrl} />
         <MemberName displayName={this.props.goal.user.login} />
-
       </tr>
     )
   }
@@ -93,7 +101,7 @@ var MemberName = React.createClass({
 //This component handles our github issue number
 var IssueNumber = React.createClass({
   render: function() {
-    return <td>{this.props.number}</td>
+    return <td className="goal">{this.props.number}</td>
   }
 })
 
@@ -113,7 +121,11 @@ var GoalLabel = function(props) {
   return <div key={props.label.name} className={className}> {props.label.name}</div>
 }
 
-
+// var LogOutButton = React.createClass({
+//   render: function() {
+//     return 
+//   }
+// })
 
 // var ImportantButton = React.createClass({
 //   render: function() {
@@ -124,4 +136,4 @@ var GoalLabel = function(props) {
 // });
 
 
-ReactDOM.render(<Main goals={AllGoals} />, document.getElementById('content'));
+ReactDOM.render(<Main />, document.getElementById('content'));
