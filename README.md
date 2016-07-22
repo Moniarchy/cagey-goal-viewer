@@ -1,4 +1,4 @@
-# Learner's Goal Viewer App
+# Learners' Goal Viewer App
 ### cagey-lapwing
 
 
@@ -10,11 +10,6 @@ Basically, you need to duplicate the functionality of a Rails app: [GitHub repo]
 ## Context
 
 Serving an actual customer is a huge part of writing good software.  If you take on this goal, you will be the customer, and have access to 19 other users - so you can talk to them, and learn about good User Experience Design (UX).
-
-Notes:
-build interface
-pull info from github, change data.. maybe no need to store data locally
-Create something useful, do user research on feature, integrate feedback into your system
 
 ## Required Specs (Must Have)
 
@@ -30,9 +25,18 @@ Create something useful, do user research on feature, integrate feedback into yo
   - [ ] Add another view, such as goals-as-cards and/or a nicely detailed show page for goals
   - [ ] Impliment review system?
   - [ ] Registered users can upvote or downvote goals
-  - [ ] Registered & anonymous users can review goals (see all pages)
+  - [ ] Registered users can review goals (see all pages)
   - [ ] You can search/filter the full description, potentially in table view
 
+
+## User Stories
+
+- [ ] As a user, I can sort the list of goals.
+- [ ] As a user, I can create a new goal.
+- [ ] As a user, I can edit my own goal.
+- [ ] As a user, I can delete my own goal.
+- [ ] As a user, I can log in via Github.
+- [ ] As a user, I can log out.
 ## REQUIRED
 
 - [ ] The artifact produced is properly licensed, preferably with the [MIT license][mit-license].
