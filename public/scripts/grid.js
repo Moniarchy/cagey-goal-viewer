@@ -2,7 +2,6 @@ var Main = React.createClass({
   componentWillMount: function(){
       $.getJSON('/goals', function(goals){
 
-      console.log(goals)
       this.setState({goals: goals})
     }.bind(this))
   },
