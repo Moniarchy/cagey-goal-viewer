@@ -59,6 +59,10 @@ app.get('/', (req, res) => {
   }
 });
 
+app.get( '/test', (request, response) => {
+  response.sendFile(__dirname + '/views/pages/test.html')
+})
+
 app.get('/login', (req, res) => {
   // url to get code
   let url = `https://github.com/login/oauth/authorize?${qs.stringify({
@@ -126,25 +130,27 @@ app.post('/create-comment', (req, res) => {
 
   // res.send( req.body )
   // Issue number to create comments
-  const { issueNumber, comment } = req.body;
-  // const issueNumber = req.body.issueNumber;
-  // const comment = req.body.comment;
+  // const { issueNumber, comment } = req.body;
+  const issueNumber = 36;
+  const comment = { body: 'HELLO WE did it, DEV & MONICA' };
 
-  const url = ghCreateComment( issueNumber )
+  // const url = ghCreateComment( issueNumber )
 
   request({
     method: 'POST',
-    url: url,
+    url: `${github_url}/repos/GuildCrafts/web-development-js/issues/${issueNumber}/comments`,
     headers: {
       'user-agent': 'node.js',
       'authorization': `Token ${token}`
     },
-    body: comment
+    body: comment,
+    json: true
   }, (error, response) => {
       if (error) throw error;
-      let comments = JSON.parse(response.body);
-      console.log( "These are the comments :D", comments);
-      res.json(comments);
+
+      // let comments = JSON.parse(response.body);
+      console.log(response.body);
+      res.json(response.body);
   })
 });
 
