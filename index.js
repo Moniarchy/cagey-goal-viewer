@@ -31,9 +31,9 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
 
   // access_token
-  let token = req.session.github_access_token;
+  const { github_access_token } = req.session;
 
-  console.log(`TOKEN: ${token}`);
+  console.log(`TOKEN: ${ github_access_token }`);
 
   // check if there is a token
   if(!token){
@@ -45,12 +45,12 @@ app.get('/', (req, res) => {
       url: `${github_url}/repos/GuildCrafts/web-development-js/issues`,
       headers: {
         'user-agent': 'node.js',
-        'authorization': `Token ${token}`
+        'authorization': `Token ${ github_access_token }`
       }
     }, (error, response) => {
       if (error) throw error;
 
-      let goals = JSON.parse(response.body);
+      const goals = JSON.parse(response.body);
 
       console.log( "These are the goals", goals);
 
@@ -59,13 +59,9 @@ app.get('/', (req, res) => {
   }
 });
 
-app.get( '/test', (request, response) => {
-  response.sendFile(__dirname + '/views/pages/test.html')
-})
-
 app.get('/login', (req, res) => {
   // url to get code
-  let url = `https://github.com/login/oauth/authorize?${qs.stringify({
+  const url = `https://github.com/login/oauth/authorize?${qs.stringify({
     scope: 'repo',
     client_id: process.env.GITHUB_CLIENT_ID
   })}`
@@ -82,7 +78,7 @@ const tokenParams = ( code ) => {
 
 app.get('/oauth_callback', (req, res) => {
   // url for token
-  let url = `https://github.com/login/oauth/access_token?${tokenParams( req.query.code )}`
+  const url = `https://github.com/login/oauth/access_token?${tokenParams( req.query.code )}`
 
   // use the URL to get a token
   request({
@@ -92,7 +88,7 @@ app.get('/oauth_callback', (req, res) => {
     if (error) throw error;
 
     // store that token in a session
-    let accessToken = qs.parse(response.body).access_token;
+    const accessToken = qs.parse(response.body).access_token;
     req.session.github_access_token = accessToken;
 
     // back to home
@@ -101,47 +97,44 @@ app.get('/oauth_callback', (req, res) => {
 });
 
 app.get('/comments', (req, res) => {
-  let token = req.session.github_access_token;
+  const { github_access_token } = req.session;
 
-  let issueNumber = req.body.number;
+  const { number } = req.body;
 
-  let url = `${github_url}/repos/GuildCrafts/web-development-js/issues/${issueNumber}/comments`
+  const url = `${github_url}/repos/GuildCrafts/web-development-js/issues/${number}/comments`
   // RR- is req.body.number right in the link above?
   request({
     method: 'GET',
     url: url,
     headers: {
       'user-agent': 'node.js',
-      'authorization': `Token ${token}`
+      'authorization': `Token ${ github_access_token }`
     }
   }, (error, response) => {
       if (error) throw error;
+
+      // these are the commets for an issues
       let comments = JSON.parse(response.body);
-      console.log( "These are the comments :D", comments);
       res.json(comments);
     })
 });
 
-const ghCreateComment = issueNumber =>
-  `${github_url}/repos/GuildCrafts/web-development-js/issues/${issueNumber}/comments`
-
 app.post('/create-comment', (req, res) => {
-  const token = req.session.github_access_token;
+  const { github_access_token } = req.session;
 
-  // res.send( req.body )
   // Issue number to create comments
-  // const { issueNumber, comment } = req.body;
-  const issueNumber = 36;
-  const comment = { body: 'HELLO WE did it, DEV & MONICA' };
+  const { issueNumber, comment } = req.body;
 
-  // const url = ghCreateComment( issueNumber )
+  // test data is below
+  // const issueNumber = 36;
+  // const comment = { body: 'HELLO WE did it, DEV & MONICA' };
 
   request({
     method: 'POST',
     url: `${github_url}/repos/GuildCrafts/web-development-js/issues/${issueNumber}/comments`,
     headers: {
       'user-agent': 'node.js',
-      'authorization': `Token ${token}`
+      'authorization': `Token ${ github_access_token }`
     },
     body: comment,
     json: true
@@ -149,17 +142,19 @@ app.post('/create-comment', (req, res) => {
       if (error) throw error;
 
       // let comments = JSON.parse(response.body);
-      console.log(response.body);
+      console.log('created comment', response.body);
       res.json(response.body);
   })
 });
 
 app.put('/update-comment', (req, res) => {
-  let token = req.session.github_access_token;
+  let { github_access_token } = req.session;
 
   // Issue number to update comments
-  let issueNumber = req.body.number;
-  let commentId = req.body.commentId;
+  const { issueNumber, comment, commentId } = req.body;
+
+  // let issueNumber = req.body.number;
+  // let commentId = req.body.commentId;
 
   let url = `${github_url}/repos/GuildCrafts/web-development-js/issues/${issueNumber}/comments/${commentId}`;
 
@@ -168,14 +163,20 @@ app.put('/update-comment', (req, res) => {
     url: url,
     headers: {
       'user-agent': 'node.js',
-      'authorization': `Token ${token}`
-    }
+      'authorization': `Token ${ github_access_token }`
+    },
+    body: comment,
   }, (error, response) => {
       if (error) throw error;
-      let comments = JSON.parse(response.body);
-      console.log( "These are the comments :D", comments);
-      res.json(comments);
+
+      console.log( "updated comments", response.body);
+      res.json(response.body);
   })
+})
+
+// test route for ajax calls
+app.get('/test', (request, response) => {
+  response.sendFile(__dirname + '/views/pages/test.html')
 })
 
 app.use(express.static(__dirname+'/views'));
