@@ -47,7 +47,6 @@ var Main = React.createClass({
             <th>Labels</th>
             <th><a href="" onClick={this.sortByTitle}>Title</a></th>
             <th><a href="" onClick={this.sortByMember}>Member Name</a></th>
-
           </tr>
         </thead>
           <tbody>
@@ -68,7 +67,6 @@ var Row = React.createClass({
         <GoalLabelsCell goal={this.props.goal} />
         <GoalTitle title={this.props.goal.title} />
         <MemberName displayName={this.props.goal.user.login} htmlUrl={this.props.goal.htmlUrl} />
-        
       </tr>
     )
   }
@@ -93,7 +91,7 @@ var MemberName = React.createClass({
 //This component handles our github issue number
 var IssueNumber = React.createClass({
   render: function() {
-    return <td>{this.props.number}</td>
+    return <td className="goal">{this.props.number}</td>
   }
 })
 
@@ -113,6 +111,9 @@ var GoalLabel = function(props) {
   return <div key={props.label.name} className={className}> {props.label.name}</div>
 }
 
+var LogOutButton = React.createClass({
+  render: 
+})
 
 /*
 

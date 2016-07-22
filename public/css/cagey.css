@@ -1,0 +1,17 @@
+table {
+	border-collapse: collapse;
+	border: 1px solid black;
+	text-align: center;
+}
+
+thead {
+	background-color: #797979;
+	color:white;
+}
+a {
+    color: #b3e8ff;
+}
+
+.goal {
+	background-color:orange;
+}
