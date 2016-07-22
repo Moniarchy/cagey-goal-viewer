@@ -14,10 +14,10 @@ Serving an actual customer is a huge part of writing good software.  If you take
 ## Required Specs (Must Have)
 
 - [ ] You have interviewed at least three potential users at your app and integrated their feedback
-- [ ] Auth is handled through GitHub Oauth, site uses the GitHub API to access goals data from this repo's issues
-- [ ] An external, published, all-JS site which improves the UX of browsing/searching these goals
-- [ ] Duplicate the functionality of https://goals-viewer-api.herokuapp.com/
-- [ ] Use React to create a smooth, one-page app UX
+- [x] Auth is handled through GitHub Oauth, site uses the GitHub API to access goals data from this repo's issues
+- [x] An external, published, all-JS site which improves the UX of browsing/searching these goals
+- [x] Duplicate the functionality of https://goals-viewer-api.herokuapp.com/
+- [x] Use React to create a smooth, one-page app UX
 - [ ] Write all your code in ES2015
 - [ ] Deploy via heroku (deployment method?)
 - [ ] Add unit with Jasmine (Investigate test driven development and have at least one passing test)
@@ -25,8 +25,8 @@ Serving an actual customer is a huge part of writing good software.  If you take
   - [ ] Add another view, such as goals-as-cards and/or a nicely detailed show page for goals
   - [ ] Impliment review system?
   - [ ] Registered users can upvote or downvote goals
-  - [ ] Registered users can review goals (see all pages)
-  - [ ] You can search/filter the full description, potentially in table view
+  - [x] Registered users can review goals (see all pages)
+  - [x] You can search/filter the full description, potentially in table view
 
 
 ## User Stories
