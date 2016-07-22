@@ -1,5 +1,6 @@
-# cagey-lapwing
-lg Goal Viewer App
+# Learner's Goal Viewer App
+### cagey-lapwing
+
 
 ## Description
 
